@@ -99,7 +99,6 @@ $(document).on('click', '.gif', function(){
             .attr('data-state','still'); 
         }
     });
-
 });
 
 //couldn't get the animate and still function to work
