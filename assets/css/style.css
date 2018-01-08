@@ -1,6 +1,6 @@
 body {
     background: url("../images/roadBG.jpg");
-    background-size: 100%;                  
+    background-size: cover;                  
     background-repeat: no-repeat;
     color: white;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif

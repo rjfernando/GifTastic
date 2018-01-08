@@ -89,7 +89,7 @@ $('#add-car').on('click', function() {
   });
 });  
 
-$(document).on('click', '.gif', function(){
+$(document).on('click', '.item', function(){
     var state = $(this).attr('data-state');
         if (state === 'still'){
             $(this).attr('src', $(this).attr('data-animate'))
