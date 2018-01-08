@@ -1,7 +1,6 @@
-var sportsCar = ['Lamborghini', 'Ferrari', 'Porsche 911', 'Audi TT', 'Maserati', 'BMW M3', 'Ford Mustang', 'Chevy Camero', 'Nissan GTR', 'Lexus RC'];
+$(document).ready(function() {
 
-
-// $(document).ready(function() {
+var sportsCar = ['Lamborghini', 'Ferrari', 'Porsche 911', 'Audi TT', 'Maserati', 'BMW M3', 'Ford Mustang', 'Chevrolet Camaro', 'Nissan GTR', 'Lexus RC'];
 
 // create buttons for each sportscar and then render to HTML
 
@@ -11,41 +10,43 @@ function renderButtons() {
     
     // Looping through the array of cars
     for (var i = 0; i < sportsCar.length; i++) {
-        // console.log(sportsCar[i]);
-      // Then dynamicaly generating buttons for each car in the array
-      var a = $('<button>');
+        console.log(sportsCar[i]);
+      
+        // Then dynamicaly generating buttons for each car in the array
+      var giphyButton = $('<button>');
       // Adding a class of car to our button
-      a.addClass('car');
+      giphyButton.addClass('car');
       // Adding a data-attribute
-      a.attr('data-name', sportsCar[i]);
+      giphyButton.attr('car-name', sportsCar[i]);
       // Providing the initial button text
-      a.text(sportsCar[i]);
+      giphyButton.text(sportsCar[i]);
       // Adding the button to the buttons-view div
-      $('#carButton').append(a);
+      $('#carButton').append(giphyButton);
     }
   }
     renderButtons();
   
-  // This function handles events when a car button is clicked
- 
-  $('#add-car').on('click', function() {
+  // This function handles events when a new car is submitted
 
-    event.preventDefault();
+function addButton() {
+$('#add-car').on('click', function() {
 
-    // This line grabs the input from the textbox
-    var car = $('#car-input').val().trim();
-     // Adding car from the textbox to our array
-    sportsCar.push(car);
-    renderButtons();
-    return false;
-  });
+      event.preventDefault();
+      var car = $('#car-input').val().trim();
+      sportsCar.push(car);
+      renderButtons();
+      return false;
+});
+
+}
+  addButton();
 
   //displays the giphy images
 
-  $('#carButton').on('click', function() {
+  $('.car').on('click', function() {
     
-    var cars = $(this).attr('data-cars'); 
-    var apiKey = "L7AcBNBpJoXhk4n3G6tfG051LWUOMI9x";
+    var cars = $(this).attr('car-name'); 
+    var apiKey = 'L7AcBNBpJoXhk4n3G6tfG051LWUOMI9x';
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + cars + "&api_key=" + apiKey + "&limit=10";
     console.log(queryURL);
     
@@ -54,11 +55,12 @@ function renderButtons() {
       method: 'GET'
     }).done(function(response) {
       console.log(response);
+      
       $('#carImages').empty();
 
       var results = response.data;
       for (var i = 0; i < results.length; i++) {
-      // console.log(results);
+      console.log(results);
       
       var gifDiv = $("<div class='item'>");
 
@@ -66,20 +68,37 @@ function renderButtons() {
       var rating = results[i].rating;
 
       // Creating a paragraph tag with the result item's rating
-      var p = $("<p>").text("Rating: " + rating);
+      var paragraph = $('<p>').text('Rating: ' + rating);
 
       // Creating an image tag
-      var carImage = $("<img>");
-
-      // Giving the image tag an src attribute of a proprty pulled off the
-      carImage.attr("src", results[i].images.fixed_height.url);
+      var carImage = $('<img>');
+     
+      // Giving the image tag an attributes of a proprty to be pulled
+      carImage.attr('src', results[i].images.fixed_height.url);
+      carImage.attr('data-still',results[i].images.fixed_height_small_still.url); 
+      carImage.attr('data-animate',results[i].images.fixed_height_small.url); 
+      carImage.attr('data-state', 'still');
+      carImage.addClass('image');
 
       // Appending the paragraph and carImage created to the "gifDiv" div created
-      gifDiv.append(p);
+      gifDiv.append(paragraph);
       gifDiv.append(carImage);
 
-      // Prepending the gifDiv to the "#carImages" div in the HTML
-      $("#carImages").prepend(gifDiv);
+      // Prepending the gifDiv to the '#carImages' div in the HTML
+      $('#carImages').prepend(gifDiv);
     }
-  })
+  });
+});  
+
+$('.image').on('click', function() {
+  var state = $(this).attr('data-state');
+
+  if (state === 'still') {
+      $(this).attr('src', $(this).attr('data-animate'));
+      $(this).attr("data-state", "animate");
+  } else {
+      $(this).attr('src', $(this).attr('data-still'));
+      $(this).attr('data-state', 'still');
+  }
+  });
 });
