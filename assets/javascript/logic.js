@@ -28,18 +28,17 @@ function renderButtons() {
   
   // This function handles events when a new car is submitted
 
-function addButton() {
 $('#add-car').on('click', function() {
 
       event.preventDefault();
+      
       var car = $('#car-input').val().trim();
+      if (car !== "") {
       sportsCar.push(car);
       renderButtons();
       return false;
+      }
 });
-
-}
-  addButton();
 
   //displays the giphy images
 
@@ -78,7 +77,7 @@ $('#add-car').on('click', function() {
       carImage.attr('data-still',results[i].images.fixed_height_small_still.url); 
       carImage.attr('data-animate',results[i].images.fixed_height_small.url); 
       carImage.attr('data-state', 'still');
-      carImage.addClass('image');
+      carImage.addClass('car-image');
 
       // Appending the paragraph and carImage created to the "gifDiv" div created
       gifDiv.append(paragraph);
@@ -90,15 +89,19 @@ $('#add-car').on('click', function() {
   });
 });  
 
-$('.image').on('click', function() {
-  var state = $(this).attr('data-state');
+$(document).on('click', '.gif', function(){
+    var state = $(this).attr('data-state');
+        if (state === 'still'){
+            $(this).attr('src', $(this).attr('data-animate'))
+            .attr('data-state','animate');  
+        } else{
+            $(this).attr('src', $(this).attr('data-still'))
+            .attr('data-state','still'); 
+        }
+    });
 
-  if (state === 'still') {
-      $(this).attr('src', $(this).attr('data-animate'));
-      $(this).attr("data-state", "animate");
-  } else {
-      $(this).attr('src', $(this).attr('data-still'));
-      $(this).attr('data-state', 'still');
-  }
-  });
 });
+
+//couldn't get the animate and still function to work
+//new car added would not change the giphy image
+
